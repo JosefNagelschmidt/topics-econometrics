@@ -1,0 +1,10 @@
+{
+  "dir": "bld/figures",
+  "parallel": true,
+  "n_workers": 2,
+  "method_list": ["trf", "grf"],
+  "version_list": ["complex", "simple"],
+  "n_list": [100,  500, 1000, 5000, 10000],
+  "d_list": [2, 5, 10],
+  "noise_sd_list": [0.1, 1]
+}

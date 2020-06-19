@@ -1,0 +1,14 @@
+{
+  "options": {
+    	"run": false,
+	"save_simulation": true,
+  	"parallel": true,
+  	"n_workers": 2,
+  	"n_sim": 100
+  },
+  "method_list": ["const", "ols", "knn", "trf", "grf"],
+  "version_list": ["complex", "simple"],
+  "n_list": [100, 200, 500, 1000],
+  "d_list": [2, 5, 10],
+  "noise_sd_list": [0.1, 1]
+}

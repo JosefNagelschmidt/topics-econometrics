@@ -1,0 +1,53 @@
+name: topics-econometrics
+
+channels:
+  - conda
+  - conda-forge
+  - r
+  - bioconda
+
+dependencies:
+  - jupyter
+  - jupyterlab
+  - jupyter_contrib_nbextensions
+  - jupyter_nbextensions_configurator
+  - nb_conda_kernels
+
+  - rise
+
+  - r-irkernel
+  - r-essentials
+  - r-devtools
+
+  - r-furrr
+  - r-tidyverse
+    # - r-styler
+  - r-plyr
+
+  - r-rjson
+  - r-png
+
+  - r-plotly
+  - r-pracma
+  - r-abind
+  - r-grf
+    # - r-caret
+    # - r-glmnet
+    # - r-modelr
+    # - r-rpart
+  - r-fnn
+  - r-ga
+<<<<<<< HEAD
+  - r-envstats
+=======
+>>>>>>> a81bf9372f00c83572e6603694ed01578d028440
+
+  - bioconductor-rgraphviz
+  # - causalToolBox (needs github installation; see below)
+
+# Installation of the conda kernel:
+#
+# $ conda env create -f environment.yml
+# $ conda activate topics-econometrics
+# $ Rscript -e 'devtools::install_github("soerenkuenzel/causalToolbox")'
+# $ Rscript -e 'IRkernel::installspec(name="topics-econometrics")'
