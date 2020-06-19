@@ -6,7 +6,6 @@ suppressMessages(library("magrittr"))
 suppressMessages(library("readr"))
 suppressMessages(library("ggplot2"))
 
-<<<<<<< HEAD
 produce_plots <- function(treatment, noise) {
   csv_file_name <- ifelse(
     treatment,
@@ -59,38 +58,3 @@ for (treatment in c(TRUE, FALSE)) {
   for (noise in c(TRUE, FALSE)) {
     produce_plots(treatment, noise)
   }
-=======
-# load options
-simulation_options <- rjson::fromJSON(
-  file="src/simulation/simulation_config.json"
-  )
-version_list <- simulation_options[["version_list"]]
-
-# load csv
-df <- readr::read_csv("bld/data/simulation_results_const_ols_knn_trf_grf.csv")
-
-df <- df %>% filter(mae <= 5)
-# construct plot
-
-for (v in version_list) {
-  if (!(v %in% df[["version"]])) next
-  df_tmp <- df %>% filter(version==v)
-  p <- ggplot2::ggplot(df_tmp, aes(y=mae, x=method, fill=method)) + 
-    geom_point(size=5, pch=21) + 
-    facet_grid(rows=vars(n), cols=vars(d)) + 
-    ylim(0, 2) + 
-    theme_minimal() + 
-    theme(
-      panel.spacing=unit(.2, "lines"),
-      panel.border = element_rect(color = "black", fill = NA, size = 0.7),
-      strip.background = element_blank()
-      ) + 
-  
-    xlab("") + 
-    ggtitle(paste0("dgp: ", v))
-  p
-  
-  file <- paste0("bld/simulation_plots/", v, ".png")
-  ggsave(file, p, device="png")
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440
-}

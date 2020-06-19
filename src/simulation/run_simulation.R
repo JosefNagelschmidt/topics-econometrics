@@ -1,16 +1,13 @@
 #' Run a Monte Carlo simulation for specified parameters using function
 #' ``monte_carlo_simulation`` from ``src/simulation/simulation.R``. Parameters
 #' are specified in the json file ``src/simulation/simulation_config.json``.
-<<<<<<< HEAD
 #' 
 #' When executing this file two simulations are run
 #' 
 #' 1. Treatment effect estimation simulation
 #' 2. Classical regression estimation
 #' 
-=======
- 
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440
+
 suppressMessages(library("rjson"))
 suppressMessages(library("magrittr"))
 suppressMessages(library("stringr"))
@@ -19,7 +16,6 @@ suppressMessages(library("future"))
 source("src/simulation/simulation.R")
 
 
-<<<<<<< HEAD
 run_simulation <- function(treatment, simulation_options, options) {
   # set options for parallel processing
   if (options[["parallel"]]) {
@@ -73,38 +69,3 @@ for (treatment in c(TRUE, FALSE)) {
     run_simulation(treatment, simulation_options, options)
   }
 }
-
-
-=======
-# load options
-simulation_options <- rjson::fromJSON(
-  file="src/simulation/simulation_config.json"
-  )
-options <- simulation_options[["options"]]
-
-# set options for parallel processing
-if (options[["parallel"]]) {
-  plan(tweak(multiprocess, workers=options[["n_workers"]]))
-}
-
-# inputs
-n_sim <- options[["n_sim"]]
-method_list <- simulation_options[["method_list"]]
-version_list <- simulation_options[["version_list"]]
-n_list <- simulation_options[["n_list"]]
-d_list <- simulation_options[["d_list"]]
-
-
-# run simulation
-result <- monte_carlo_simulation(
-  n_sim, method_list, version_list, n_list, d_list, noise_sd_list=1,
-  verbose=FALSE, progress_bar=TRUE
-)
-
-# store results if wanted
-if (options[["save_simulation"]]) {
-  identifier <- paste(method_list, collapse="_")
-  file_name <- paste0("bld/data/simulation_results", "_", identifier, ".csv")
-  readr::write_csv(result, file_name)
-}
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440

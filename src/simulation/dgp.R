@@ -73,7 +73,6 @@ dgp_complex <- function(n, d, noise_sd) {
 }
 
 
-<<<<<<< HEAD:src/simulation/dgp.R
 dgp_unbalanced <- function(n, d, noise_sd) {
   #'
   assertthat::assert_that(
@@ -83,18 +82,7 @@ dgp_unbalanced <- function(n, d, noise_sd) {
   )
   
   treatment_propensity <- 0.2
-=======
-dgp_boundary <- function(n, d, noise_sd) {
-  #'
-  assertthat::assert_that(
-    d >= 5,
-    msg="Main effect of boundary data generating process can only be computed
-     when the number of feature dimension is 5 or higher."
-  )
-  
-  treatment_propensity <- 0.5
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
-  
+
   X <- matrix(rnorm(n * d), nrow=n, ncol=d)
   W <- rbinom(n, size=1, prob=treatment_propensity)
   W <- matrix(W, ncol=1)
@@ -112,21 +100,9 @@ dgp_boundary <- function(n, d, noise_sd) {
 }
 
 
-<<<<<<< HEAD:src/simulation/dgp.R
 dgp_simple <- function(n, d, noise_sd) {
   #'
   treatment_propensity <- 0.5
-=======
-dgp_unbalanced <- function(n, d, noise_sd) {
-  #'
-  assertthat::assert_that(
-    d >= 2,
-    msg="Treatment effect of unbalanced data generating process can only be
-     computed when the number of feature dimension is 2 or higher."
-  )
-  
-  treatment_propensity <- 0.2
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
   
   X <- matrix(runif(n * d), nrow=n, ncol=d)
   W <- rbinom(n, size=1, prob=treatment_propensity)
@@ -145,19 +121,9 @@ dgp_unbalanced <- function(n, d, noise_sd) {
 }
 
 
-<<<<<<< HEAD:src/simulation/dgp.R
 dgp_boundary <- function(n, d, noise_sd, testing=FALSE) {
   #' Classical regression context without treatment effects.
   #'
-=======
-dgp_simple <- function(n, d, noise_sd) {
-  #'
-  treatment_propensity <- 0.5
-  
-  X <- matrix(runif(n * d), nrow=n, ncol=d)
-  W <- rbinom(n, size=1, prob=treatment_propensity)
-  W <- matrix(W, ncol=1)
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
   
   if (testing) {
     X <- draw_from_ring(n, d)
@@ -194,6 +160,14 @@ treatment_effect_complex <- function(X) {
   return(zeta(X[, 1]) * zeta(X[, 2]))
 }
 
+treatment_effect_simple <- function(X) {
+  #' 
+  #' Unrestricted dimensionality of X.
+  #' 
+  treatment_effect <- rep(2, nrow(X))
+  return(treatment_effect)
+}
+
 
 main_effect_unbalanced <- function(X, d) {
   #'
@@ -212,57 +186,23 @@ treatment_effect_unbalanced <- function(X) {
 }
 
 
-<<<<<<< HEAD:src/simulation/dgp.R
-treatment_effect_simple <- function(X) {
-  #' 
-  #' Unrestricted dimensionality of X.
-  #' 
-  treatment_effect <- rep(2, nrow(X))
-=======
-treatment_effect_boundary <- function(X) {
-  #'
-  #' Dimensionality of X >= 2.
-  #' 
-  treatment_effect <- X[, 1] + log(1 + exp(X[, 2]))
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
-  return(treatment_effect)
-}
-
-
-<<<<<<< HEAD:src/simulation/dgp.R
 main_effect_simple <- function(X) {
   #' Roos & Arnold (1963) - Function
   #' 
   XX <- abs(4 * X - 2)
   main_effect <- apply(XX, 1, prod)
-=======
-main_effect_boundary <- function(X) {
-  #'
-  main_effect <- max(X[, 1] + X[, 2], X[, 3], 0) + max(X[, 4], X[, 5], 0)
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
-  return(main_effect)
 }
 
 
-<<<<<<< HEAD:src/simulation/dgp.R
 main_effect_boundary <- function(X) {
   #'
   #' Dimensionality of X >= 2.
   #' 
   treatment_effect <- X[, 1] + log(1 + exp(X[, 2]))
-=======
-treatment_effect_simple <- function(X) {
-  #' 
-  #' Unrestricted dimensionality of X.
-  #' 
-  treatment_effect <- rep(2, nrow(X))
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
-  return(treatment_effect)
 }
 
 #------------------------- Helper functions -----------------------------------
 
-<<<<<<< HEAD:src/simulation/dgp.R
 draw_from_ring <- function(n, d) {
   X_ <- matrix(rnorm(n * (d-2)), nrow=n, ncol=d-2)
   X <- matrix(nrow=0, ncol=2)
@@ -275,12 +215,4 @@ draw_from_ring <- function(n, d) {
   X <- cbind(X, X_)
   rownames(X) <- NULL
   return(X)
-=======
-main_effect_simple <- function(X) {
-  #' Roos & Arnold (1963) - Function
-  #' 
-  XX <- abs(4 * X - 2)
-  main_effect <- apply(XX, 1, prod)
-  return(main_effect)
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/dgp.R
 }

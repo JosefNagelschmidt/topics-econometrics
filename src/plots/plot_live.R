@@ -23,11 +23,7 @@ plot_live <- function(version) {
   fig <- switch (version,
     "complex" = plot_treatment_complex(),
     "unbalanced" = plot_treatment_unbalanced(),
-<<<<<<< HEAD:src/plots/plot_live.R
     "boundary" = plot_main_boundary(),
-=======
-    "boundary" = plot_treatment_boundary(),
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/plot_treatment.R
     "simple" = plot_treatment_simple(),
     "simple_main" = plot_main_simple(),
     "unbalanced_main" = plot_main_unbalanced(),
