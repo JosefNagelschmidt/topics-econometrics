@@ -21,8 +21,12 @@ produce_plots <- function(treatment, noise) {
   
   for (v in version_list) {
     if (!(v %in% df[["version"]])) next
-    df_tmp <- df %>% filter(version==v) #, noise_sd==1)
-    p <- ggplot2::ggplot(df_tmp, aes(y=mae, x=method, fill=method)) + 
+    if (noise) {
+      df_tmp <- df %>% filter(version==v) #, noise_sd==1)
+    } else {
+      df_tmp <- df %>% filter(version==v, noise_sd==1)
+    }
+    p <- ggplot2::ggplot(df_tmp, aes(y=mae, x=method, fill=method))
     if (noise) {
       p <- p + geom_point(aes(alpha=factor(noise_sd)), size=5, pch=21) + 
       scale_alpha_manual(values=c(0.2, 0.85), name="noise")
@@ -58,3 +62,4 @@ for (treatment in c(TRUE, FALSE)) {
   for (noise in c(TRUE, FALSE)) {
     produce_plots(treatment, noise)
   }
+}

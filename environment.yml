@@ -37,10 +37,6 @@ dependencies:
     # - r-rpart
   - r-fnn
   - r-ga
-<<<<<<< HEAD
-  - r-envstats
-=======
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440
 
   - bioconductor-rgraphviz
   # - causalToolBox (needs github installation; see below)

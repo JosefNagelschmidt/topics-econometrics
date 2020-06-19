@@ -1,7 +1,8 @@
 suppressMessages(library("magrittr"))
 suppressMessages(library("assertthat"))
 source("src/simulation/dgp.R")
-source("src/predictor.R")
+source("src/predictor/treatment_effect_predictor.R")
+source("src/predictor/conditional_mean_predictor.R")
 
 
 LOWER_UPPER <- list(
@@ -100,13 +101,13 @@ plot_surface <- function(
       par(mfrow=c(1, 2))
       plot_list[["plot_call"]]()
       plot_true_effect(version, n_ticks)
-      mtext(plot_list[["plot_title"]], outer=TRUE, cex=1.5)
+      # mtext(plot_list[["plot_title"]], outer=TRUE, cex=1.5)
       dev.off()
     } else {
       par(mfrow=c(1, 2))
       plot_list[["plot_call"]]()
       plot_true_effect(version, n_ticks)
-      mtext(plot_list[["plot_title"]], outer=TRUE, cex=1.5, side=3, line=-5)
+      # mtext(plot_list[["plot_title"]], outer=TRUE, cex=1.5, side=3, line=-5)
     }
     par(mfrow=c(1, 1))
   }
