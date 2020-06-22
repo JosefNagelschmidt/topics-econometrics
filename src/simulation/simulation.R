@@ -2,12 +2,8 @@
 # methods to estimate heterogeneous treatment effects in multiple data settings.
 
 source("src/simulation/dgp.R")
-<<<<<<< HEAD:src/simulation/simulation.R
 source("src/predictor/treatment_effect_predictor.R")
 source("src/predictor/conditional_mean_predictor.R")
-=======
-source("src/predictor.R")
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/simulation.R
 suppressMessages(library("furrr"))
 suppressMessages(library("purrr"))
 suppressMessages(library("tidyr"))

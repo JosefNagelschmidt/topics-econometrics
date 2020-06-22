@@ -61,18 +61,27 @@ params_grid <- construct_grid(
 
 # save=TRUE
 func <- function(...) {
-  plot_surface(
-    save=TRUE, load=FALSE, file_name=dir, n_threads=2, ...
-    )
+  version <- list(...)[["version"]]
+  method <- list(...)[["method"]]
+  if (version %in% c("complex", "simple") & !(method %in% c("rf", "llf"))) {
+    plot_surface(
+      save=TRUE, load=TRUE, file_name=dir, n_threads=2, ...
+      )
+  }
+  
+  if (version == "boundary" & method != "trf") {
+    plot_surface(
+      save=TRUE, load=TRUE, file_name=dir, n_threads=2, treatment=FALSE, ...
+      )
+  }
 }
 
-# plot in parallel
-# for (kwargs in params_grid) {
-#   do.call(func, kwargs)
-# }
-furrr::future_map(
-  params_grid,
-  function(kwargs) do.call(func, kwargs),
-  .progress=TRUE
-  )
+for (kwargs in params_grid) {
+  do.call(func, kwargs)
+}
+# furrr::future_map(
+#   params_grid,
+#   function(kwargs) do.call(func, kwargs),
+#   .progress=TRUE
+#   )
 

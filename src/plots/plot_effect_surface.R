@@ -16,6 +16,7 @@ LOWER_UPPER <- list(
 plot_surface <- function(
   method,
   version,
+  treatment=TRUE,
   n=1000,
   d=2,
   p=1,
@@ -54,7 +55,9 @@ plot_surface <- function(
   #' @param load: Logical, if TRUE we search for a plot which was
   #' created before in the directory specified by file_name and display this,
   #' otherwise a new plot is created.
-  assertthat::assert_that(method %in% c('const', 'knn', 'trf', 'grf', 'ols'))
+  assertthat::assert_that(method %in% c(
+    'const', 'rf', 'knn', 'trf', 'grf', 'ols', 'llf'
+    ))
   assertthat::assert_that(
     version %in% c('simple', 'unbalanced', 'boundary', 'complex')
     )
@@ -67,7 +70,10 @@ plot_surface <- function(
   assertthat::assert_that(save %>% is.logical)
   assertthat::assert_that(load %>% is.logical)
   assertthat::assert_that(file_name %>% is.null | file_name %>% is.string)
-  d <- ifelse(version == "boundary" & d < 5, 5, d)
+  
+  if (version == "boundary" & treatment) {
+    stop("Boundary dgp cannot be used for a treatment effect setting.")
+  }
   
   file_path <- create_file_path(
     file_name, method, version, n, d, noise_sd, p, k
@@ -82,6 +88,7 @@ plot_surface <- function(
     plot_list <- plot_predicted_effect(
       method=method,
       version=version,
+      treatment=treatment,
       n=n,
       d=d,
       p=p,
@@ -100,13 +107,13 @@ plot_surface <- function(
       png(file_path, width=800, height=400)
       par(mfrow=c(1, 2))
       plot_list[["plot_call"]]()
-      plot_true_effect(version, n_ticks)
+      plot_true_effect(version, treatment, n_ticks)
       # mtext(plot_list[["plot_title"]], outer=TRUE, cex=1.5)
       dev.off()
     } else {
       par(mfrow=c(1, 2))
       plot_list[["plot_call"]]()
-      plot_true_effect(version, n_ticks)
+      plot_true_effect(version, treatment, n_ticks)
       # mtext(plot_list[["plot_title"]], outer=TRUE, cex=1.5, side=3, line=-5)
     }
     par(mfrow=c(1, 1))
@@ -117,6 +124,7 @@ plot_surface <- function(
 plot_predicted_effect <- function(
   method,
   version,
+  treatment=TRUE,
   n=1000,
   d=2,
   p=1,
@@ -132,7 +140,13 @@ plot_predicted_effect <- function(
   #'
   data <- dgp(version, n, d, seed, noise_sd)
   
-  predictor <- treatment_effect_predictor(
+  if (treatment) {
+    predictor_func <- treatment_effect_predictor
+  } else {
+    predictor_func <- conditional_mean_predictor
+  }
+  
+  predictor <- predictor_func(
     method, data, p=p, interaction=interaction, k=k, n_trees=n_trees, n_threads=n_threads
     )
   
@@ -157,9 +171,17 @@ plot_predicted_effect <- function(
   Xnew <- cbind(xy, extension)
   
   # predict effects and transform to 2d
-  effects <- predict_treatment_effect(
-    method, predictor, X=Xnew, W=NULL, Y=NULL
-  )
+  if (treatment) {
+    effects <- predict_treatment_effect(
+      method, predictor, X=Xnew, W=NULL, Y=NULL
+    )
+    zlab="(pred.) treatment effect"
+  } else {
+    effects <- predict_conditional_mean(
+      method, predictor, X=Xnew, Y=NULL
+    )
+    zlab="(pred.) conditional mean"
+  }
   effects2d <- pracma::Reshape(effects, n_ticks, n_ticks)
   
   # since const. is constant, function persp3D sets wrong limits
@@ -173,7 +195,7 @@ plot_predicted_effect <- function(
     GA::persp3D(
       x, x, effects2d, theta=theta_phi[1], phi=theta_phi[2],
       col.palette=GA::bl2gr.colors, expand=0.75, zlim=zlim,
-      xlab="x1", ylab="x2", zlab="(pred.) treatment effect"
+      xlab="x1", ylab="x2", zlab=zlab
     )
   }
   plot_title <- create_plot_title(
@@ -185,10 +207,10 @@ plot_predicted_effect <- function(
 }
 
 
-plot_true_effect <- function(version, n_ticks=50) {
+plot_true_effect <- function(version, treatment=TRUE, n_ticks=50) {
   options <- switch (version,
     "complex" = list(treatment_effect_complex, c(0, 4)),
-    "boundary" = list(treatment_effect_boundary, c(-4, 8)),
+    "boundary" = list(main_effect_boundary, c(-4, 8)),
     "simple" = list(treatment_effect_simple, c(0, 4)),
     "unbalanced" = list(treatment_effect_unbalanced, c(-2, 10))
   )
@@ -198,12 +220,18 @@ plot_true_effect <- function(version, n_ticks=50) {
   lower = LOWER_UPPER[[version]][1]
   upper = LOWER_UPPER[[version]][2]
   
+  if (treatment) {
+    zlab <- "(true) treatment effect"
+  } else {
+    zlab <- "(true) conditional mean"
+  }
+  
   x <- seq(lower, upper, length.out=n_ticks)
   y <- x
   z <- outer(x, y, function(x, y) func(cbind(x, y)))
   GA::persp3D(
     x, y, z, theta=300, phi=20, col.palette=GA::bl2gr.colors, expand=0.75,
-    zlim=zlim, xlab="x1", ylab="x2", zlab="(true) treatment effect"
+    zlim=zlim, xlab="x1", ylab="x2", zlab=zlab
     )
 }
 

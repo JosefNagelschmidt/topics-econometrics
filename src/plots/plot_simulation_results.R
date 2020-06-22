@@ -5,6 +5,8 @@
 suppressMessages(library("magrittr"))
 suppressMessages(library("readr"))
 suppressMessages(library("ggplot2"))
+suppressMessages(library("dplyr"))
+suppressMessages(library("extrafont"))
 
 produce_plots <- function(treatment, noise) {
   csv_file_name <- ifelse(
@@ -16,6 +18,13 @@ produce_plots <- function(treatment, noise) {
   # load csv
   df <- readr::read_csv(csv_file_name)
   version_list <- unique(df[["version"]])
+  
+  if (treatment) {
+    df[["method"]] <- factor(df[["method"]], levels=c("const", "ols", "knn", "grf", "trf"))
+  } else {
+    df[["method"]] <- factor(df[["method"]], levels=c("ols", "knn", "rf", "grf", "llf"))
+    df <- df %>% filter(!(method=="ols"))
+  }
   
   # construct plot
   
@@ -37,7 +46,7 @@ produce_plots <- function(treatment, noise) {
       ylim(0, 2) + 
       theme_minimal() + 
       theme(
-        text=element_text(family="palatino", face="italic"),
+        text=element_text(family="Palatino", face="italic"),
         plot.title = element_text(vjust=-2.5),
         panel.spacing = unit(0.8, "lines"),
         panel.grid.minor.y = element_line(colour = "black", size=0.1),
@@ -48,6 +57,7 @@ produce_plots <- function(treatment, noise) {
       xlab("") + 
       ylab("(integrated) mean absolute error") +
       ggtitle(paste0("dgp: ", v))
+    
     if (noise) {
       file <- paste0("bld/simulation_plots/", v, "-noise.png")
     } else{

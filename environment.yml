@@ -18,6 +18,7 @@ dependencies:
   - r-irkernel
   - r-essentials
   - r-devtools
+  - r-extrafont
 
   - r-furrr
   - r-tidyverse
@@ -37,6 +38,7 @@ dependencies:
     # - r-rpart
   - r-fnn
   - r-ga
+  - r-randomforest
 
   - bioconductor-rgraphviz
   # - causalToolBox (needs github installation; see below)
