@@ -72,7 +72,7 @@ plot_surface <- function(
   assertthat::assert_that(file_name %>% is.null | file_name %>% is.string)
   
   if (version == "boundary" & treatment) {
-    stop("Boundary dgp cannot be used for a treatment effect setting.")
+    treatment <- FALSE
   }
   
   file_path <- create_file_path(
