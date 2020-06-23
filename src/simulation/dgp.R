@@ -203,13 +203,13 @@ main_effect_boundary <- function(X) {
 
 #------------------------- Helper functions -----------------------------------
 
-draw_from_ring <- function(n, d) {
+draw_from_ring <- function(n, d, l=3) {
   X_ <- matrix(rnorm(n * (d-2)), nrow=n, ncol=d-2)
   X <- matrix(nrow=0, ncol=2)
  
   while (nrow(X) < n) {
     x <- matrix(rnorm(2), nrow=1, ncol=2)
-    if (sqrt(sum(x ** 2)) > 2.75) X <- rbind(X, x)
+    if (sqrt(sum(x ** 2)) > l) X <- rbind(X, x)
   }
   
   X <- cbind(X, X_)

@@ -186,6 +186,60 @@ plot_main_boundary <- function() {
 }
 
 
+add_standard_samples_to_boundary <- function(fig, seed=0) {
+  #'
+  set.seed(seed)
+  n_points <- 200
+  X <- matrix(rnorm(n_points * 2), ncol=2)
+  Z <- main_effect_boundary(X)
+  
+  options(warn=-1)
+  fig <- fig %>% add_trace(
+    x = X[, 1], y = X[, 2], z = Z, 
+    mode = "markers", type = "scatter3d", 
+    marker = list(size = 2, color = "red", symbol = 104)
+    )
+  return(fig)
+}
+
+add_boundary_samples_to_boundary <- function(fig, seed=0) {
+  #'
+  set.seed(seed)
+  n_points <- 200
+  
+  X <- matrix(nrow=0, ncol=2)
+  while(nrow(X) < n_points) {
+    x <- rnorm(2)
+    if (sqrt(sum(x ** 2)) > 3.5) X <- rbind(X, x)
+  }
+  Z <- main_effect_boundary(X)
+  
+  fig <- fig %>% add_trace(
+    x = X[, 1], y = X[, 2], z = Z, 
+    mode = "markers", type = "scatter3d", 
+    marker = list(size = 2, color = "red", symbol = 104)
+    )
+  return(fig)
+}
+
+
+add_density_to_boundary <- function(fig) {
+  #'
+  n_points <- 200
+  mesh <- custom_meshgrid(lower=-5, upper=5, n_points=n_points)
+  
+  densities <- 50 * mvtnorm::dmvnorm(mesh$XY)
+  density_mesh <- matrix(densities, ncol=n_points)
+  
+  fig <- fig %>% add_surface(
+    z = ~density_mesh,
+    opacity=0.70,
+    colorscale=list(c(0, 1), c("white", "black"))
+    )
+  return(fig)
+}
+
+
 
 #---------------------------Helper functions------------------------------------
 

@@ -20,7 +20,8 @@ produce_plots <- function(treatment, noise) {
   version_list <- unique(df[["version"]])
   
   if (treatment) {
-    df[["method"]] <- factor(df[["method"]], levels=c("const", "ols", "knn", "grf", "trf"))
+    df[["method"]] <- factor(df[["method"]], levels=c("ols", "knn", "grf", "trf"))
+    df <- df %>% filter(!(method=="const"))
   } else {
     df[["method"]] <- factor(df[["method"]], levels=c("ols", "knn", "rf", "grf", "llf"))
     df <- df %>% filter(!(method=="ols"))

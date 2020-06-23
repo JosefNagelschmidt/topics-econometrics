@@ -121,7 +121,6 @@ single_monte_carlo_run_inner <- function(
   }
 
   data_train <- dgp(version, n, d, seed, noise_sd)
-<<<<<<< HEAD:src/simulation/simulation.R
   data_test <- dgp(version, n=1000, d, -1, noise_sd, testing=TRUE)
   
   if (treatment) {
@@ -141,17 +140,6 @@ single_monte_carlo_run_inner <- function(
     k=heuristic_k(n),
     p=heuristic_p(n, d),
     n_threads=n_threads
-=======
-  data_test <- dgp(version, n=500, d, -1, noise_sd)
-  
-  predictor <- treatment_effect_predictor(
-    method,
-    data_train,
-    n_trees=500,
-    k=floor(0.05*n),
-    p=heuristic_p(n, d),
-    n_threads=2
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/simulation.R
     )
   estimate <- estimate_func(method, predictor, data_test)
   
@@ -174,8 +162,6 @@ construct_grid <- function(
   )
   colnames(df_grid) <- columns
   
-  df_grid <- df_grid %>% filter(!((version=="boundary") & (d < 5)))
-  df_grid <- df_grid %>% filter(!((version=="unbalanced") & (n < 250)))
   params_grid <- df_grid %>% split(seq(nrow(df_grid)))
   
   out <- list(params=params_grid, df=df_grid)
@@ -218,10 +204,7 @@ heuristic_p <- function(n, d) {
   if (p > 10) p <- 10
   return(p)
 }
-<<<<<<< HEAD:src/simulation/simulation.R
 
 heuristic_k <- function(n) {
   return(floor(0.05*n))
 }
-=======
->>>>>>> a81bf9372f00c83572e6603694ed01578d028440:src/simulation.R
