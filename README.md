@@ -30,6 +30,20 @@ $ Rscript -e 'IRkernel::installspec(name="topics-econometrics")'
 ```
 Where the last step might be necessary to run an R kernel in a jupyter notebook.
 
+## Data Generating Processes
+
+We consider three important data processes, two of which fall in the category of
+predicting (heterogeneous) treatment effects and the other one considers the estimation
+of a conditional mean function.
+
+See our data processes notebook for more information:
+<a href="https://nbviewer.jupyter.org/github/timmens/topics-econometrics/blob/master/data_processes.ipynb" 
+    target="_parent">
+    <img align="center" 
+   src="https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.png" 
+       width="109" height="20">
+</a> 
+
 ## Methods
 
 We compare the following methods:
@@ -49,19 +63,20 @@ See our methods notebook for more information:
        width="109" height="20">
 </a> 
 
-## Data Generating Processes
+## Theory
 
-We consider three important data processes, two of which fall in the category of
-predicting (heterogeneous) treatment effects and the other one considers the estimation
-of a conditional mean function.
-
-See our data processes notebook for more information:
-<a href="https://nbviewer.jupyter.org/github/timmens/topics-econometrics/blob/master/data_processes.ipynb" 
+For the generalized random forest, causal forest and local linear forest, we provide
+an explaination for a few theoretical results. In particular, we consider the theorem
+under which the predicted function from the generalized random forest converges in
+distribution to a normal pointwise.
+<a href="https://nbviewer.jupyter.org/github/timmens/topics-econometrics/blob/master/theory.ipynb" 
     target="_parent">
     <img align="center" 
    src="https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.png" 
        width="109" height="20">
 </a> 
+
+
 
 
 ## Simulation
